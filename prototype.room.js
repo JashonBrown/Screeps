@@ -68,7 +68,7 @@ Room.prototype.getCreeps = function()
 Object.defineProperty(Room.prototype, 'creeps', {
     get: function () {
         if (!this._creeps) {
-            this._creeps = {};
+            this._creeps = this.find(FIND_MY_CREEPS);;
         }
         return this._creeps;
     },

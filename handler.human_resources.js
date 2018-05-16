@@ -17,7 +17,7 @@ module.exports =
     _prioritizeQueuedCreeps(rooms_requiring_creeps);
 
     // Spawn required creeps
-    _spawnCreeps();
+    _spawnCreeps(rooms_requiring_creeps);
    } 
 }
 
@@ -50,7 +50,7 @@ var _populateQueuedCreeps = function ()
             let creep = room.getCreeps()[i];
 
             // Assign to appropriate list
-            switch (creep.role)
+            switch (creep.memory.role)
             {
               case ROLES.harvester:
                 harvesters.push(creep);
@@ -78,6 +78,8 @@ var _populateQueuedCreeps = function ()
         // Require lib if going to be spawning a creep
         if (harvesters_to_spawn > 0 || builders_to_spawn > 0 || upgraders_to_spawn > 0 || transporters_to_spawn > 0) var creep_generator = require('handler.creep_generator');
 
+        // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
         // Need to spawn harvester?
         if (harvesters_to_spawn > 0)
         { 
@@ -91,6 +93,8 @@ var _populateQueuedCreeps = function ()
                 room.getQueuedCreeps().push(creep);
             }
         }
+
+        // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
         // Need to spawn builder?
         if (builders_to_spawn > 0)
@@ -106,6 +110,8 @@ var _populateQueuedCreeps = function ()
             }
         }
 
+        // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
         // Need to spawn upgrader?
         if (upgraders_to_spawn > 0)
         { 
@@ -119,6 +125,8 @@ var _populateQueuedCreeps = function ()
                 room.getQueuedCreeps().push(creep);
             }
         }
+
+        // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
         // Need to spawn transporter?
         if (transporters_to_spawn > 0)
@@ -172,6 +180,7 @@ var _getRoomsRequiringCreeps = function()
 var _prioritizeQueuedCreeps = function(rooms)
 {
     // TODO: Set priorities and stoof
+
 }
 
 //--------------------------------------------------------------
@@ -180,16 +189,13 @@ var _prioritizeQueuedCreeps = function(rooms)
  * Spawns any required creeps
  * @return void
  */
-var _spawnCreeps = function () 
+var _spawnCreeps = function (rooms) 
 {
-    // Get rooms that require creeps
-    let rooms_requiring_creeps = _.filter(Game.rooms, (room) => room.queuedCreeps && room.queuedCreeps.length > 0);
-
     // Spawn creeps for each spawns room if there is any
-    for(let i in rooms_requiring_creeps)
+    for(let i in rooms)
     {
         // Get room
-        let room = rooms_requiring_creeps[i];
+        let room = rooms[i];
 
         // Room has spawn in it?
         let spawns_in_room = _.filter(Game.spawns, (spawn) => spawn.room == room);

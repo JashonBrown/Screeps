@@ -42,6 +42,16 @@ module.exports.loop = function ()
 
   // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
+  // Perform all creep actions
+  try {
+    handler_creep.performCreepActions();
+  }
+  catch (err) {
+    logger.error('Failed performing creep actions: ' + err);
+  }
+
+  // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
   // Clean up
   try {
     clean_up.cleanUp();
